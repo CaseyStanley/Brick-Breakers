@@ -3,13 +3,13 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "mob.app.dev.brickbreaker"
+        id        = "mob.app.dev.demolitionmaze"
         version   = "1.0.0">
 
-    <name>Brick Breaker</name>
+    <name>Demolition Maze</name>
 
     <description>
-        An application that runs the game Brick Breakers for a Computing assignment.
+        An application that runs the game Demolition Maze for a Computing assignment.
     </description>
 
     <author href="worcester.ac.uk" email="stac3_16@uni.worc.ac.uk">
