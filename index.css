@@ -1,0 +1,11 @@
+#wreckingball
+{
+    position: absolute;
+    top: 0%;
+    left: 75%;
+}
+#background
+{
+    background-size: cover;
+    background-repeat: no-repeat;
+}

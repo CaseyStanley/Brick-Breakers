@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset = "utf-8">
+<html>
+<head>
+    <title>Demolition Maze</title>
+    <!--jQuery link-->
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Mobile jQuery link for css-->
+    <link rel = "stylesheet" href = "http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+        <!--Fireworks-->
+        <script type = "jquery.fireworks.js"></script>
+    <!--Link to my Javascript file-->
+    <script type = "text/javascript" src = "index.js"></script>
+    <!--Link to my CSS file-->
+    <link rel = "stylesheet" href = "index.css"/>
+</head>
+<body>
+<div data-role = "page" id = "startScreen">
+    <div data-role = "header">
+        <h1>Demolition Maze<div id = "title" ></div></h1>
+    </div>
+    <div data-role = "main">
+        <body background = "BrickWall.jpg" id = "background">
+        <img src = "WreckingBall.png" id = "wreckingball" width = "243" height = "400">
+        <a href="#nameScreen" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Open Panel</a>
+        </body>
+    </div>
+</div>
+<div data-role = "page" id = "nameScreen">
+    <script id='username' type='text/ractive'>
+		 <label> Enter a username: <input value = '{{name}}'></label>
+		 <p> Hello, {{name}}!</p>
+    </script>
+</div>
+</body>
+</html>

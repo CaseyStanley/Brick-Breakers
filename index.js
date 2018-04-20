@@ -18,3 +18,11 @@ function onResume()
 {
     alert("resume");
 }
+
+$(document).on("pagecreate","#nameScreen", onPageCreated);
+
+function onPageCreated() {
+    var ractive = new Ractive({
+        template: '#username',
+    });
+}
