@@ -1,2 +1,2 @@
-# Brick-Breakers
-An application that runs the game Brick Breakers for a Computing assignment.
+# Demolition Maze
+An application that runs the game Demolition Maze for a Computing assignment.
