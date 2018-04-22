@@ -17,18 +17,30 @@
 <body>
 <div data-role = "page" id = "startScreen">
     <div data-role = "header">
+        <!-- Game title -->
         <h1>Demolition Maze<div id = "title" ></div></h1>
     </div>
     <div data-role = "main">
-        <body background = "BrickWall.jpg" id = "background">
-        <img src = "WreckingBall.png" id = "wreckingball" width = "243" height = "400">
+        <!-- Background images -->
+        <body background = "brickWall.jpg" id = "background">
+        <img src = "wreckingBall.png" id = "wreckingball" width = "243" height = "400">
+        <!-- Button -->
         <a href="#container" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Open Panel</a>
         </body>
     </div>
 </div>
 <div id = "container" data-role = "main" class = "ui-content">
     <div id = "game">
+        <div data-role = "header">
+            <!-- Lives and score -->
+            <h2>Lives: <div id = "lives"></div></h2>
+            <h3>Score: <div id = "score"></div></h3>
+        </div>
+        <!-- Onload function -->
         <body onload = "begin()"></body>
+        <!-- Fireworks -->
+        <div class = "demo"></div>
+        <!-- Canvas with subsequent images needed -->
         <canvas id = "myCanvas" width = "480" height = "360" tabindex = "1">
             <img id = "bomb" src = "bomb.png"  width = "20" height = "26">
             <img id = "star" src = "Star.png" width = "38" height = "10">
@@ -38,7 +50,20 @@
             <img id = "positive" src = "Positive.png" width = "20" height = "20">
         </canvas>
     </div>
+    <!-- Shows which level you are on -->
+    <div id = "leveltwo">Level </div>
 </div>
+<!-- Game over screen with restart button -->
+<div data-role = "page" id = "over">
+    <h3 id = "gOver">GAME OVER</h3>
+    <button id = "restartButton" width = "10%">Restart</button>
+</div>
+<!-- Completion screen with restart button -->
+<div data-role = "page" id = "complete">
+    <h3 id = "completed">Congratulations!</h3>
+    <button id = "restartGame" width = "10%">Restart</button>
+</div>
+
 <!--<div data-role = "page" id = "usernameScreen">
     <input type = "text" id = "addUsername" value = "" placeholder = "Enter Username"/>
     <input type = "button" id = "addUsernameButton" value = "Submit"/>

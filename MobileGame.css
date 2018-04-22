@@ -19,3 +19,15 @@ body, html
     width: 100%;
     height: 100%;
 }
+#lives
+{
+    text-align: center;
+}
+#score
+{
+    text-align: center;
+}
+#title
+{
+    text-align: center;
+}
