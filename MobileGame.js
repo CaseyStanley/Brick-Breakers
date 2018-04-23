@@ -1,11 +1,24 @@
-document.addEventListener("deviceready", onDeviceReady, false);
+var wd, ht;
+
+//document.addEventListener("deviceready", onDeviceReady, false); /* use this on mobile */
+$(window).ready(function(){onDeviceReady()});/* use this on desktop */
+    
 
 function onDeviceReady()
 {
     document.addEventListener("resume", onResume, false);
     document.addEventListener("pause", onPause, false);
-
     alert("device ready");
+}
+
+function screensize()
+{
+    var ratio = window.devicePixelRatio || 1;
+    wd = screen.width * ratio;
+    ht = screen.height * ratio;
+    console.log (wd+"X"+ht)
+    $("#myCanvas").width(wd);
+    $("#myCanvas").height(ht);
 }
 
 function onPause()
@@ -92,8 +105,6 @@ var theme = new Audio();
 theme.src = "Theme.mp3"
 var pop = new Audio();
 pop.src = "pop.wav"
-var scrWid;
-var scrHt;
 var colourArray=[];
 var divWidth;
 var clickX;
@@ -148,6 +159,7 @@ function begin()
     // Getting content from the html file
     canvas = document.getElementById("myCanvas");
     gc = canvas.getContext("2d");
+    screensize();
     bomb = document.getElementById("bomb");
     star = document.getElementById("star");
     skull = document.getElementById("skull");
@@ -318,7 +330,7 @@ function render()
     for (var i = 0; i < blocks.length; i++)
     {
         drawBlock();
-        collisionBlock();
+        collisionBlock(i);
     }
 }
 
@@ -503,10 +515,10 @@ function drawBlock()
     }
 }
 
-function collisionBlock()
+function collisionBlock(i)
 {
     // If the block collides with the ball, play the pop sound and get rid of the block, bounce the ball off and check what colour the block was to add on a certain score
-    if (block.X < ballX + ballRadius && block.X + block.Width > ballX && (block.Y+extraY) < ballY + ballRadius && block.Height + (block.Y + extraY) > ballY)
+    if (blocks[i].X < ballX + ballRadius && blocks[i].X + blocks[i].Width > ballX && (blocks[i].Y+extraY) < ballY + ballRadius && blocks[i].Height + (blocks[i].Y + extraY) > ballY)
     {
         if (gameStart)
         {

@@ -2,32 +2,40 @@
 {
     position: absolute;
     top: 0%;
-    left: 75%;
+    left: 65%;
 }
-#background
+#startScreen
 {
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-image: url("brickWall.jpg");
+    background-size: 100% 100%;
 }
 #myCanvas
 {
     border: 1px solid  black;
     background-color: #fffcbc;
 }
-body, html
+body
 {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 50px);
+    /*height: auto;*/
 }
-#lives
+#lives, #score, #title
 {
     text-align: center;
 }
-#score
+.head
+{
+    display:inline-block;
+}
+.start_button
 {
     text-align: center;
+    width: 10%;
+    left: 42%;
 }
-#title
+.title
 {
+    font-size: 5em;
     text-align: center;
 }
