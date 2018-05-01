@@ -265,11 +265,11 @@ function render()
        clickX = e.clientX;
        if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
        {
-           sliderX += 7;
+           sliderX += 1;
        }
        else if (clickX < divWidth/2 && sliderX > 0)
        {
-           sliderX -= 7;
+           sliderX -= 1;
        }
     });
 
