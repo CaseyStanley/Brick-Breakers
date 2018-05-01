@@ -8,15 +8,12 @@ function onDeviceReady()
 {
     document.addEventListener("resume", onResume, false);
     document.addEventListener("pause", onPause, false);
-    alert("device ready");
 }
 
 function screensize()
 {
-    var ratio = window.devicePixelRatio || 1;
-    wd = screen.width * ratio;
-    ht = screen.height * ratio;
-    console.log (wd+"X"+ht)
+    wd = window.innerWidth-10;
+    ht = window.innerHeight-30;
     $("#myCanvas").width(wd);
     $("#myCanvas").height(ht);
 }
@@ -31,17 +28,6 @@ function onResume()
 {
     alert("resume");
 }
-
-//Changes orientation to landscape
-document.addEventListener("orientationchange", function(event)
-{
-    switch(window.orientation)
-    {
-        case -90: case 90:
-        break;
-        default:
-    }
-});
 
 $(document).on("pagecreate", "#gamescreen", begin);
 
@@ -223,7 +209,7 @@ function getLevelDesigns()
     blocks = [
         // X and Y are the starting position for the block. W is width, H is height and C is the colour from the colourArray.  The sizes are percentages.
         // Level 1
-        {x:[12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5],y:[10,10,10,10,10,10,10,10,10,10,10],w:[30,30,30,30,30,30,30,30,30,30,30],h:[30,30,30,30,30,30,30,30,30,30,30],c:[0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[1,12,23,34,45,56,67,78,89,100,111],y:[10,10,10,10,10,10,10,10,10,10,10],w:[10,10,10,10,10,10,10,10,10,10,10],h:[10,10,10,10,10,10,10,10,10,10,10],c:[0,0,0,0,0,0,0,0,0,0,0]},
         // Level 2
         {x:[12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5,55,97.5,140,182.5,225,267.5,310,352.5,395],y:[10,10,10,10,10,10,10,10,10,10,10,50,50,50,50,50,50,50,50,50],w:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],h:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],c:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 3
@@ -273,9 +259,9 @@ function computeAndRender()
 
 function render()
 {
-    $("#container").click(function(e)
+    $("#gamescreen").click(function(e)
     {
-       divWidth = $("#container").width();
+       divWidth = $("#gamescreen").width();
        clickX = e.clientX;
        if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
        {
@@ -476,7 +462,7 @@ function compute()
         lives -= 1;
         life();
         resetfromloss();
-        reset();
+        getLevelDesigns();
     }
 }
 
@@ -601,7 +587,7 @@ function gameOver()
     gc.clearRect (0, 0, canvas.width, canvas.height);
     end.play();
     stop = true;
-    $("#over").show().animate({top:"-30%"});
+    $("#over").show();
 }
 
 // When the restart button is clicked if you die then it hides the over, resets the score and then resets the game back to the beginning
