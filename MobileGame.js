@@ -43,7 +43,7 @@ document.addEventListener("orientationchange", function(event)
     }
 });
 
-$(document).on("pagecreate", "#container", begin);
+$(document).on("pagecreate", "#gamescreen", begin);
 
 //Set variables
 var canvas;
