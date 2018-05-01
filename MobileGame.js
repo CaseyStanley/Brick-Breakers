@@ -476,7 +476,7 @@ function compute()
         lives -= 1;
         life();
         resetfromloss();
-        restart();
+        reset();
     }
 }
 
