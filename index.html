@@ -32,7 +32,12 @@
             <div data-role = "header">
                 <!-- Lives and score -->
                 <h2 class="head">Lives: <span id = "lives"></span>&nbsp;Score: <span id = "score"></span></h2>
+                <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Settings</a>
             </div>
+        <div data-role="panel" id="settings"> 
+            <h2>Panel Header</h2>
+            <p>You can close the panel by clicking outside the panel, pressing the Esc key or by swiping.</p>
+        </div> 
             <!-- Canvas with subsequent images needed -->
             <canvas id = "myCanvas" width = "480" height = "360" tabindex = "1">
                 <img id = "bomb" src = "bomb.png"  width = "20" height = "26">
@@ -47,8 +52,8 @@
     
     <!-- Game over screen with restart button -->
     <div data-role = "page" id = "over">
-        <h3 id = "gOver">GAME OVER</h3>
-        <button id = "restartButton" width = "10%">Restart</button>
+        <h1 class="title">Game Over</h1>
+        <button id = "restartButton">Restart</button>
     </div>
     <!-- Completion screen with restart button -->
     <div data-role = "page" id = "complete">

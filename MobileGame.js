@@ -1,8 +1,8 @@
-var wd, ht;
+// var wd, ht;
 
 //document.addEventListener("deviceready", onDeviceReady, false); /* use this on mobile */
 $(window).ready(function(){onDeviceReady()});/* use this on desktop */
-    
+
 
 function onDeviceReady()
 {
@@ -10,13 +10,30 @@ function onDeviceReady()
     document.addEventListener("pause", onPause, false);
 }
 
-function screensize()
+function screenSize()
+{
+    screenWidth=window.innerWidth;
+    screenHeight=window.innerHeight;
+    scWiAd=screenWidth-50;
+    scHeAd=screenHeight-50;
+    canvas.width=scWiAd;
+    canvas.height=scHeAd;
+    widPer=scWiAd/100;
+    heiPer=scHeAd/100;
+    sliderWidth=widPer*20;
+    ballRadius=widPer*2;
+    console.log(randomWidth());
+}
+
+// maybe delete this
+/* function screenSizeNew()
 {
     wd = window.innerWidth-10;
     ht = window.innerHeight-30;
     $("#myCanvas").width(wd);
     $("#myCanvas").height(ht);
-}
+
+} */
 
 function onPause()
 {
@@ -32,7 +49,7 @@ function onResume()
 $(document).on("pagecreate", "#gamescreen", begin);
 
 //Set variables
-var canvas;
+var canvas, scWiAd;
 var gc;
 var sliderHeight = 10;
 var sliderWidth;
@@ -117,7 +134,7 @@ function reset()
 function resetfromloss()
 {
     // Resetting variables when the ball goes below the canvas
-    sliderX = 150;
+    sliderX = 350;
     ballDX = 2;
     ballDY = 2;
     ballX = widPer * 48;
@@ -136,6 +153,9 @@ function begin()
     life();
     scorer();
 
+    var xx=randomNumber();
+    console.log(xx)
+
     // If the game hasn't started then show the start panel
     if(!gameStart)
     {
@@ -145,7 +165,7 @@ function begin()
     // Getting content from the html file
     canvas = document.getElementById("myCanvas");
     gc = canvas.getContext("2d");
-    screensize();
+    screenSize();
     bomb = document.getElementById("bomb");
     star = document.getElementById("star");
     skull = document.getElementById("skull");
@@ -159,32 +179,27 @@ function begin()
     getLevelDesigns();
 
     // Setting variables
-    flowerLoc = -26;
+
     flowerVelo = 0.1;
-    flowerLocWidth = widPer * 45;
+    flowerLocWidth = randomWidth();
     flowerLoc = widPer * 45;
-    skullLoc = -26;
     skullVelo = 0.1;
-    skullLocWidth = widPer * 45;
+    skullLocWidth = randomWidth();
     skullLoc = heiPer * 45;
-    starLoc = -26;
     starVelo = 0.1;
-    starLocWidth = widPer * 45;
+    starLocWidth = randomWidth();
     starLoc = heiPer * 45;
-    bombLoc = -26;
     bombVelo = 0.1;
-    bombLocWidth = widPer * 45;
+    bombLocWidth = randomWidth();
     bombLoc = heiPer * 45;
-    negativeLoc = -26;
     negativeVelo = 0.1;
-    negativeLocWidth = widPer * 45;
+    negativeLocWidth = randomWidth();
     negativeLoc = heiPer * 45;
-    positiveLoc = -26;
     positiveVelo = 0.1;
-    positiveLocWidth = widPer * 45;
+    positiveLocWidth = randomWidth();
     positiveLoc = heiPer * 45;
-    spriteWidth = widPer * 10;
-    spriteHeight = heiPer * 10;
+    spriteWidth = widPer * 5;
+    spriteHeight = heiPer * 5;
     ballX = widPer * 48;
     ballY = heiPer * 75;
     sliderY = scHeAd - sliderHeight;
@@ -209,7 +224,7 @@ function getLevelDesigns()
     blocks = [
         // X and Y are the starting position for the block. W is width, H is height and C is the colour from the colourArray.  The sizes are percentages.
         // Level 1
-        {x:[1,12,23,34,45,56,67,78,89,100,111],y:[10,10,10,10,10,10,10,10,10,10,10],w:[10,10,10,10,10,10,10,10,10,10,10],h:[10,10,10,10,10,10,10,10,10,10,10],c:[0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[1,10,19,28,37,46,55,64,73,82,91],y:[10,10,10,10,10,10,10,10,10,10,10],w:[7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10],c:[0,0,0,0,0,0,0,0,0,0,0]},
         // Level 2
         {x:[12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5,55,97.5,140,182.5,225,267.5,310,352.5,395],y:[10,10,10,10,10,10,10,10,10,10,10,50,50,50,50,50,50,50,50,50],w:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],h:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],c:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 3
@@ -259,20 +274,7 @@ function computeAndRender()
 
 function render()
 {
-    $("#gamescreen").click(function(e)
-    {
-       divWidth = $("#gamescreen").width();
-       clickX = e.clientX;
-       if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
-       {
-           sliderX += 1;
-       }
-       else if (clickX < divWidth/2 && sliderX > 0)
-       {
-           sliderX -= 1;
-       }
-    });
-
+    
     // Clear the canvas
     gc.clearRect (0, 0, canvas.width, canvas.height);
     // Draw images
@@ -316,10 +318,17 @@ function render()
     for (var i = 0; i < blocks.length; i++)
     {
         drawBlock();
-        collisionBlock(i);
     }
 }
-
+function randomWidth()
+{
+   ranWid=Math.floor(Math.random()*scWiAd-50);
+   if(ranWid<50)
+   {
+     ranWid+=50;
+   }
+   return ranWid;
+}
 function randomNumber()
 {
     // Sets a random Y position above the canvas up to 1000
@@ -329,7 +338,21 @@ function randomNumber()
 
 function compute()
 {
-    // Making the variables move
+    $("#gamescreen").click(function(e)
+    {
+       divWidth = $("#gamescreen").width();
+       clickX = e.clientX;
+       if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
+       {
+           sliderX += 0.2;
+       }
+       else if (clickX < divWidth/2 && sliderX > 0)
+       {
+           sliderX -= 0.2;
+       }
+    });
+	
+	// Making the variables move
     ballX += ballDX
     ballY += ballDY
     bombLoc += 1
@@ -339,38 +362,40 @@ function compute()
     negativeLoc += 1
     positiveLoc += 1
 
+    collisionBlock();
+
     // If the image is greater than 1000 below the canvas send the image to the top of the canvas with a random X and random Y above the canvas
-    if (negativeLoc > 1000)
+    if (negativeLoc > scHeAd)
     {
         negativeRestart = randomNumber();
         negativeLoc = -50 - negativeRestart;
         negativeLocWidth = Math.floor((Math.random() * canvas.width) + 1);
     }
-    if (positiveLoc > 1000)
+    if (positiveLoc > scHeAd)
     {
         positiveRestart = randomNumber();
         positiveLoc = -50 - positiveRestart;
         positiveLocWidth = Math.floor((Math.random() * canvas.width) + 1);
     }
-    if (skullLoc > 1000)
+    if (skullLoc > scHeAd)
     {
         skullRestart = randomNumber();
         skullLoc = -50 - skullRestart;
         skullLocWidth = Math.floor((Math.random() * canvas.width) + 1);
     }
-    if (flowerLoc > 1000)
+    if (flowerLoc > scHeAd)
     {
         flowerRestart = randomNumber();
         flowerLoc = -50 - flowerRestart;
         flowerLocWidth = Math.floor((Math.random() * canvas.width) + 1);
     }
-    if (starLoc > 1000)
+    if (starLoc > scHeAd)
     {
         starRestart = randomNumber();
         starLoc = -50 - starRestart;
         starLocWidth = Math.floor((Math.random() * canvas.width) + 1);
     }
-    if (bombLoc > 1000)
+    if (bombLoc > scHeAd)
     {
         bombRestart = randomNumber();
         bombLoc = -50 - bombRestart;
@@ -501,41 +526,52 @@ function drawBlock()
     }
 }
 
-function collisionBlock(i)
+function collisionBlock()
 {
+
     // If the block collides with the ball, play the pop sound and get rid of the block, bounce the ball off and check what colour the block was to add on a certain score
-    if (blocks[i].X < ballX + ballRadius && blocks[i].X + blocks[i].Width > ballX && (blocks[i].Y+extraY) < ballY + ballRadius && blocks[i].Height + (blocks[i].Y + extraY) > ballY)
+
+    for(i=0;i<blocks[level-1].x.length;i++)
     {
-        if (gameStart)
-        {
-            pop.play();
-            blocks[level].x.splice(i,1);
-            blocks[level].y.splice(i,1);
-            blocks[level].w.splice(i,1);
-            blocks[level].h.splice(i,1);
-            blocks[level].c.splice(i,1);
-            ballDY = -ballDY;
-            collisionColor();
-        }
+        if(ballX+ballRadius>widPer*blocks[level-1].x[i]&&
+          ballX<widPer*blocks[level-1].x[i]+widPer*blocks[level-1].w[i]&&
+          ballY+ballRadius>heiPer*blocks[level-1].y[i]&&
+          ballY<heiPer*blocks[level-1].y[i]+heiPer*blocks[level-1].h[i])
+            {
+              if (gameStart)
+              {
+                  pop.play();
+                  blocks[level-1].x.splice(i,1);
+                  blocks[level-1].y.splice(i,1);
+                  blocks[level-1].w.splice(i,1);
+                  blocks[level-1].h.splice(i,1);
+                  blocks[level-1].c.splice(i,1);
+                  ballDY = -ballDY;
+                  collisionColor(i);
+              }
+            }
     }
+
 }
 
-function collisionColor()
+function collisionColor(i)
 {
+  var colour_of_blocks=blocks[level-1].c[i];
+
     // If the block is blue then add on 10 points
-    if (block.Color == "#008B8B")
+    if (colourArray[colour_of_blocks] == "#008B8B")
     {
         score += 10;
         scorer();
     }
     // If the block is gold then add on 50 points
-    if (block.Color == "#FFDF00")
+    if (colourArray[colour_of_blocks] == "#FFDF00")
     {
         score += 50;
         scorer();
     }
     // If the block is green then add on 20 points
-    if (block.Color == "#9DD885")
+    if (colourArray[colour_of_blocks] == "#9DD885")
     {
         score += 20;
         scorer();
@@ -617,20 +653,6 @@ function scorer ()
 {
     // Score taken from the html element
     document.getElementById("score").innerText = score
-}
-
-function screenSize()
-{
-    screenWidth=window.innerWidth;
-    screenHeight=window.innerHeight;
-    scWiAd=screenWidth-50;
-    scHeAd=screenHeight-50;
-    canvas.width=scWiAd;
-    canvas.height=scHeAd;
-    widPer=scWiAd/100;
-    heiPer=scHeAd/100;
-    sliderWidth=widPer*20;
-    ballRadius=widPer*2;
 }
 
 /*$(document).on("pagecreate","#nameScreen", onPageCreated);
