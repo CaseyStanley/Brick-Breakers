@@ -1,11 +1,13 @@
 // var wd, ht;
 
+$(document).on("pagecreate", "#startScreen", onDeviceReady);
 //document.addEventListener("deviceready", onDeviceReady, false); /* use this on mobile */
-$(window).ready(function(){onDeviceReady()});/* use this on desktop */
+/*$(window).ready(function(){onDeviceReady()});/* use this on desktop */
 
 
 function onDeviceReady()
 {
+    console.log("jdshcuidn");
     document.addEventListener("resume", onResume, false);
     document.addEventListener("pause", onPause, false);
 }
