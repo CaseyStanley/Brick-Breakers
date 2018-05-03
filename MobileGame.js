@@ -8,8 +8,8 @@ $(document).on("pagecreate", "#startScreen", onDeviceReady);
 function onDeviceReady()
 {
     console.log("jdshcuidn");
-    document.addEventListener("resume", onResume, false);
-    document.addEventListener("pause", onPause, false);
+    document.addEventListener("resume", onResume, true);
+    document.addEventListener("pause", onPause, true);
 }
 
 function screenSize()
@@ -39,12 +39,14 @@ function screenSize()
 
 function onPause()
 {
+    console.log("pause");
     alert("pause");
 }
 
 
 function onResume()
 {
+    console.log("resume");
     alert("resume");
 }
 
