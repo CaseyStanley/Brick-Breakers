@@ -10,6 +10,8 @@
     <link rel = "stylesheet" href = "http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
     <!--Fireworks-->
     <script type = "jquery.fireworks.js"></script>
+    <!--Cordova-->
+    <script src = "cordova.js"></script>
     <!--Link to my Javascript file-->
     <script type = "text/javascript" src = "MobileGame.js"></script>
     <!--Link to my CSS file-->
@@ -18,8 +20,19 @@
 <body>
     <div data-role = "page" id = "startScreen">
         <div>
-            <!-- Background images -->
-           <!-- <img src="brickWall.jpg" id = "background"> -->
+            <div data-role = "header">
+                <!-- Settings panel -->
+                <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow" onclick = "panel()">Settings</a>
+            </div>
+            <div data-role="panel" id="settings">
+                <h2>Panel Header</h2>
+                <p>You can close the panel by clicking outside the panel, pressing the Esc key or by swiping.</p>
+                <label class = "switch">
+                    <input type = "checkbox" data-role = "flipswitch" name = "check" id = "check" onclick = "checkBox()" checked="">
+                    <span class = "slider round"></span>
+                </label>
+            </div>
+            <!-- Background image -->
             <img src = "wreckingBall.png" id = "wreckingball" width = "243" height = "400">
             <!-- Button -->
             <h1 class="title">Demolition Maze</h1>
@@ -32,12 +45,7 @@
             <div data-role = "header">
                 <!-- Lives and score -->
                 <h2 class="head">Lives: <span id = "lives"></span>&nbsp;Score: <span id = "score"></span></h2>
-                <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Settings</a>
             </div>
-        <div data-role="panel" id="settings"> 
-            <h2>Panel Header</h2>
-            <p>You can close the panel by clicking outside the panel, pressing the Esc key or by swiping.</p>
-        </div> 
             <!-- Canvas with subsequent images needed -->
             <canvas id = "myCanvas" width = "480" height = "360" tabindex = "1">
                 <img id = "bomb" src = "bomb.png"  width = "20" height = "26">
@@ -49,7 +57,7 @@
             </canvas>
         </div>
     </div>
-    
+    <div data-role = "page" id = "leveltwo"></div>
     <!-- Game over screen with restart button -->
     <div data-role = "page" id = "over">
         <h1 class="title">Game Over</h1>

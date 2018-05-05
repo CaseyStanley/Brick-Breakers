@@ -1,19 +1,17 @@
-// var wd, ht;
-
-$(document).on("pagecreate", "#startScreen", onDeviceReady);
-//document.addEventListener("deviceready", onDeviceReady, false); /* use this on mobile */
+//$(document).on("pagecreate", "#startScreen", onDeviceReady);
+document.addEventListener("deviceready", onDeviceReady, false); /* use this on mobile */
 /*$(window).ready(function(){onDeviceReady()});/* use this on desktop */
 
 
 function onDeviceReady()
 {
-    console.log("jdshcuidn");
     document.addEventListener("resume", onResume, true);
     document.addEventListener("pause", onPause, true);
 }
 
 function screenSize()
 {
+    console.log("screensize is called");
     screenWidth=window.innerWidth;
     screenHeight=window.innerHeight;
     scWiAd=screenWidth-50;
@@ -27,27 +25,17 @@ function screenSize()
     console.log(randomWidth());
 }
 
-// maybe delete this
-/* function screenSizeNew()
-{
-    wd = window.innerWidth-10;
-    ht = window.innerHeight-30;
-    $("#myCanvas").width(wd);
-    $("#myCanvas").height(ht);
-
-} */
-
 function onPause()
 {
-    console.log("pause");
-    alert("pause");
+    stop = true;
 }
 
 
 function onResume()
 {
-    console.log("resume");
-    alert("resume");
+    setTimeout(function(){
+        stop = false;
+    },1000);
 }
 
 $(document).on("pagecreate", "#gamescreen", begin);
@@ -64,7 +52,7 @@ var ballY;
 var ballRadius;
 var ballDX = 2;
 var ballDY = 2;
-var level = 3;
+var level = 1;
 var blocks = [];
 var blockDX = 2;
 var blockDY = 2;
@@ -115,9 +103,12 @@ pop.src = "pop.wav"
 var colourArray=[];
 var divWidth;
 var clickX;
+var checks;
+var clickHandled = true;
 
 function reset()
 {
+    console.log("reset is called");
     // Resetting variables when the restart button is pressed
     sliderX = 150,
         sliderWidth = 75;
@@ -137,6 +128,7 @@ function reset()
 
 function resetfromloss()
 {
+    console.log("resetfromloss is called");
     // Resetting variables when the ball goes below the canvas
     sliderX = 350;
     ballDX = 2;
@@ -153,12 +145,11 @@ function resetfromloss()
 
 function begin()
 {
+    console.log("begin");
+    
     // Shows the life and score on the screen before hand
     life();
     scorer();
-
-    var xx=randomNumber();
-    console.log(xx)
 
     // If the game hasn't started then show the start panel
     if(!gameStart)
@@ -208,19 +199,14 @@ function begin()
     ballY = heiPer * 75;
     sliderY = scHeAd - sliderHeight;
 
-    $("#gamescreen").on('click touchstart', function(e)
-    {
-        console.log("helloooooo");
-        divWidth = $("#gamescreen").width();
-        clickX = e.clientX;
-    });
-    
     // Starts the animation frame loop
     requestAnimationFrame(computeAndRender)
 };
 
 function startGame()
 {
+    console.log("startGame");
+    
     $("#leveltwo").hide();
     $(document.body).ready(function()
     {
@@ -228,10 +214,20 @@ function startGame()
         $("#myCanvas").show();
         gameStart = true;
     });
+    
+     $("#gamescreen").on('click touchstart', function(e)
+    {
+        console.log("helloooooo");
+        clickHandled = false;
+        divWidth = $("#gamescreen").width();
+        clickX = e.clientX;
+    });
+    
 }
 
 function getLevelDesigns()
 {
+    console.log("getleveldesigns is called");
     blocks = [
         // X and Y are the starting position for the block. W is width, H is height and C is the colour from the colourArray.  The sizes are percentages.
         // Level 1
@@ -252,6 +248,7 @@ function getLevelDesigns()
 
 function computeAndRender()
 {
+    console.log("computeandrender is called");
     // When the lives hit 0 then the game ends
     if (lives == 0)
     {
@@ -285,7 +282,7 @@ function computeAndRender()
 
 function render()
 {
-    
+    console.log("render is called");
     // Clear the canvas
     gc.clearRect (0, 0, canvas.width, canvas.height);
     // Draw images
@@ -299,7 +296,8 @@ function render()
     drawSlider();
     // Draw ball
     drawBall();
-
+    checks = document.getElementById("check"); 
+    checkBox();
     // If the game level is higher than 4 move the blocks
     if (level > 4)
     {
@@ -333,6 +331,7 @@ function render()
 }
 function randomWidth()
 {
+    console.log("randomwidth is called");
    ranWid=Math.floor(Math.random()*scWiAd-50);
    if(ranWid<50)
    {
@@ -342,6 +341,7 @@ function randomWidth()
 }
 function randomNumber()
 {
+    console.log("randomnumber is called");
     // Sets a random Y position above the canvas up to 1000
     ranNum = Math.floor(Math.random() * 1000);
     return ranNum;
@@ -349,13 +349,18 @@ function randomNumber()
 
 function compute()
 {
-    if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
-    {
-        sliderX += 7;
-    }
-    else if (clickX < divWidth/2 && sliderX > 0)
-    {
-        sliderX -= 7;
+    console.log("compute is called");
+    if(!clickHandled) {
+        if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
+        {
+            sliderX += 100;
+        }
+        else if (clickX < divWidth/2 && sliderX > 0)
+        {
+            sliderX -= 100;
+        }
+        clickHandled = true;
+        
     }
 	
 	// Making the variables move
@@ -499,6 +504,7 @@ function compute()
 
 function drawSlider()
 {
+    console.log("drawslider is called");
     // Draw slider
     gc.beginPath();
     gc.rect (sliderX, sliderY, sliderWidth, sliderHeight);
@@ -509,6 +515,7 @@ function drawSlider()
 
 function drawBall()
 {
+    console.log("drawball is called");
     // Draw ball
     gc.beginPath();
     gc.arc (ballX, ballY, ballRadius, 0, 2 * Math.PI);
@@ -519,6 +526,7 @@ function drawBall()
 
 function drawBlock()
 {
+    console.log("drawblock is called");
     // Draw blocks
     for(i = 0; i < blocks[level-1].x.length; i++)
     {
@@ -534,7 +542,7 @@ function drawBlock()
 
 function collisionBlock()
 {
-
+    console.log("collision is called");
     // If the block collides with the ball, play the pop sound and get rid of the block, bounce the ball off and check what colour the block was to add on a certain score
 
     for(i=0;i<blocks[level-1].x.length;i++)
@@ -562,6 +570,7 @@ function collisionBlock()
 
 function collisionColor(i)
 {
+    console.log("collisioncoloour is called");
   var colour_of_blocks=blocks[level-1].c[i];
 
     // If the block is blue then add on 10 points
@@ -586,15 +595,17 @@ function collisionColor(i)
     whatLevel();
 }
 
-function whatLevel(block)
+function whatLevel()
 {
+    console.log("what level")
     // If the all the blocks have been hit, increase the level by 1, bounce the ball off, show which level you are on and draw the next set of blocks
-    if (blocks.length == 0)
+    if (blocks[level-1].x.length == 0)
     {
+        console.log("blocks.length")
         level += 1;
         ballDY = -ballDY;
         nextLevel();
-        restart();
+        getLevelDesigns();
     }
     // When it hits level 7 it clears the canvas, plays the theme tune, hides the element saying what level you are on, produces the fireworks and sound effects, and shows complete and restart button
     if (level == 7)
@@ -615,9 +626,10 @@ function whatLevel(block)
 
 function nextLevel()
 {
+    console.log("next level")
     stop = true;
     document.getElementById("leveltwo").innerHTML = "Level " + level;
-    $("#leveltwo").css({left:"46%"}).show().animate({top:"20%"}).fadeOut(3000);
+    $("#leveltwo").show().animate({top:"20%"}).fadeOut(3000);
     beam.play();
     stop = false;
     extraY = 0;
@@ -626,6 +638,7 @@ function nextLevel()
 // Clears the canvas once you die, plays the end phrase and shows the over
 function gameOver()
 {
+    console.log("gameover is called");
     gc.clearRect (0, 0, canvas.width, canvas.height);
     end.play();
     stop = true;
@@ -635,6 +648,7 @@ function gameOver()
 // When the restart button is clicked if you die then it hides the over, resets the score and then resets the game back to the beginning
 $(document).on("click","#restartButton",function()
 {
+    console.log("restartbutton is pressed");
     $("#over").hide().animate({top:"30%"});
     document.getElementById("score").innerText = "";
     reset();
@@ -644,6 +658,7 @@ $(document).on("click","#restartButton",function()
 // When the restart game at the end is clicked then it hides the complete, resets the score and then reloads the page
 $(document).on("click","#restartGame",function()
 {
+    console.log("complete is called");
     $("#complete").hide().animate({top:"30%"});
     document.getElementById("score").innerText="";
     window.location.reload(true);
@@ -660,7 +675,18 @@ function scorer ()
     // Score taken from the html element
     document.getElementById("score").innerText = score
 }
-
+function checkBox()
+{
+    if (checks.checked == true)
+    {
+        pew.pause();
+        beam.pause();
+        end.pause();
+        start.pause();
+        theme.pause();
+        pop.pause();
+    }
+}
 /*$(document).on("pagecreate","#nameScreen", onPageCreated);
 
 function onPageCreated() {
