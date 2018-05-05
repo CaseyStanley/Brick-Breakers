@@ -9,7 +9,7 @@
     <!--Mobile jQuery link for css-->
     <link rel = "stylesheet" href = "http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
     <!--Fireworks-->
-    <script type = "jquery.fireworks.js"></script>
+    <script src = "jquery.fireworks.js"></script>
     <!--Cordova-->
     <script src = "cordova.js"></script>
     <!--Link to my Javascript file-->
@@ -20,32 +20,33 @@
 <body>
     <div data-role = "page" id = "startScreen">
         <div>
-            <div data-role = "header">
-                <!-- Settings panel -->
-                <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow" onclick = "panel()">Settings</a>
-            </div>
             <div data-role="panel" id="settings">
-                <h2>Panel Header</h2>
-                <p>You can close the panel by clicking outside the panel, pressing the Esc key or by swiping.</p>
+                <h1>Settings</h1>
+                <p>Please swipe to close.</p>
                 <label class = "switch">
-                    <input type = "checkbox" data-role = "flipswitch" name = "check" id = "check" onclick = "checkBox()" checked="">
-                    <span class = "slider round"></span>
+                    <h2>Sound:</h2>
+                    <input type = "checkbox" data-role = "flipswitch" name = "check" id = "check" checked = "">
                 </label>
             </div>
             <!-- Background image -->
             <img src = "wreckingBall.png" id = "wreckingball" width = "243" height = "400">
             <!-- Button -->
             <h1 class="title">Demolition Maze</h1>
-            <a href="#gamescreen" class="ui-btn ui-btn-inline ui-corner-all ui-shadow start_button">Open Panel</a>
+            <a href="#gamescreen" class="ui-btn ui-btn-inline ui-corner-all ui-shadow start_button">Start Game</a>
+            <br/><br/>
+            <!-- Settings panel -->
+            <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow panel_button" onclick = "panel()">Settings</a>
         </div>
     </div>
 
-    <div id = "gamescreen" data-role = "page" class = "ui-content">
+    <div id = "gamescreen" data-role = "page" class = "ui-content" style="background:white">
         <div id = "game">
-            <div data-role = "header">
+            <div data-role = "header" style="background:white; border: none;" >
                 <!-- Lives and score -->
                 <h2 class="head">Lives: <span id = "lives"></span>&nbsp;Score: <span id = "score"></span></h2>
             </div>
+            <!-- Fireworks -->
+            <div class="demo"></div>
             <!-- Canvas with subsequent images needed -->
             <canvas id = "myCanvas" width = "480" height = "360" tabindex = "1">
                 <img id = "bomb" src = "bomb.png"  width = "20" height = "26">
@@ -65,8 +66,8 @@
     </div>
     <!-- Completion screen with restart button -->
     <div data-role = "page" id = "complete">
-        <h3 id = "completed">Congratulations!</h3>
-        <button id = "restartGame" width = "10%">Restart</button>
+        <h1 class = "title">Congratulations!</h1>
+        <button id = "restartGame">Restart</button>
     </div>
 
 <!--<div data-role = "page" id = "usernameScreen">

@@ -11,7 +11,6 @@ function onDeviceReady()
 
 function screenSize()
 {
-    console.log("screensize is called");
     screenWidth=window.innerWidth;
     screenHeight=window.innerHeight;
     scWiAd=screenWidth-50;
@@ -22,7 +21,6 @@ function screenSize()
     heiPer=scHeAd/100;
     sliderWidth=widPer*20;
     ballRadius=widPer*2;
-    console.log(randomWidth());
 }
 
 function onPause()
@@ -45,14 +43,14 @@ var canvas, scWiAd;
 var gc;
 var sliderHeight = 10;
 var sliderWidth;
-var sliderX = 150;
+var sliderX = 350;
 var sliderY;
 var ballX;
 var ballY;
 var ballRadius;
 var ballDX = 2;
 var ballDY = 2;
-var level = 1;
+var level = 6;
 var blocks = [];
 var blockDX = 2;
 var blockDY = 2;
@@ -108,9 +106,8 @@ var clickHandled = true;
 
 function reset()
 {
-    console.log("reset is called");
     // Resetting variables when the restart button is pressed
-    sliderX = 150,
+    sliderX = 350,
         sliderWidth = 75;
     ballDX = 2,
         ballDY = 2,
@@ -128,7 +125,6 @@ function reset()
 
 function resetfromloss()
 {
-    console.log("resetfromloss is called");
     // Resetting variables when the ball goes below the canvas
     sliderX = 350;
     ballDX = 2;
@@ -146,7 +142,7 @@ function resetfromloss()
 function begin()
 {
     console.log("begin");
-    
+    checks = document.getElementById("check");
     // Shows the life and score on the screen before hand
     life();
     scorer();
@@ -210,14 +206,20 @@ function startGame()
     $("#leveltwo").hide();
     $(document.body).ready(function()
     {
-        start.play();
+        if (checks.checked == false)
+        {
+            start.pause
+        }
+        else
+        {
+            start.play();
+        }
         $("#myCanvas").show();
         gameStart = true;
     });
     
      $("#gamescreen").on('click touchstart', function(e)
     {
-        console.log("helloooooo");
         clickHandled = false;
         divWidth = $("#gamescreen").width();
         clickX = e.clientX;
@@ -227,7 +229,6 @@ function startGame()
 
 function getLevelDesigns()
 {
-    console.log("getleveldesigns is called");
     blocks = [
         // X and Y are the starting position for the block. W is width, H is height and C is the colour from the colourArray.  The sizes are percentages.
         // Level 1
@@ -237,18 +238,17 @@ function getLevelDesigns()
         // Level 3
         {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 4
-        {x:[12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5,55,97.5,140,182.5,225,267.5,310,352.5,395,55,97.5,140,182.5,225,267.5,310,352.5,395,97.5,140,182.5,225,257.5,310,352.5],y:[10,10,10,10,10,10,10,10,10,10,10,50,50,50,50,50,50,50,50,50,90,90,90,90,90,90,90,90,90,130,130,130,130,130,130,130],w:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],h:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35,35,35,50,50,50,50,50,50,50],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 5
-        {x:[12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5,55,97.5,140,182.5,225,267.5,310,352.5,395,55,97.5,140,182.5,225,267.5,310,352.5,395,97.5,140,182.5,225,257.5,310,352.5,140,182.5,225,257.5,310],y:[10,10,10,10,10,10,10,10,10,10,10,50,50,50,50,50,50,50,50,50,90,90,90,90,90,90,90,90,90,130,130,130,130,130,130,130,170,170,170,170,170],w:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],h:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74,140,29,38,47,56,65],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35,35,35,50,50,50,50,50,50,50,65,65,65,65,65],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 6
-        {x:[12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5,55,97.5,140,182.5,225,267.5,310,352.5,395,55,97.5,140,182.5,225,267.5,310,352.5,395,97.5,140,182.5,225,257.5,310,352.5,140,182.5,225,257.5,310,12.5,55,97.5,140,182.5,225,257.5,310,352.5,395,437.5],y:[10,10,10,10,10,10,10,10,10,10,10,50,50,50,50,50,50,50,50,50,90,90,90,90,90,90,90,90,90,130,130,130,130,130,130,130,170,170,170,170,170,210,210,210,210,210,210,210,210,210,210,210],w:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],h:[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]}
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74,29,38,47,56,65,2,11,20,29,38,47,56,65,74,83,92],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35,35,35,50,50,50,50,50,50,50,65,65,65,65,65,80,80,80,80,80,80,80,80,80,80,80],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]}
     ];
     colourArray=["#008B8B","#FFDF00","#9DD885"];
 }
 
 function computeAndRender()
 {
-    console.log("computeandrender is called");
     // When the lives hit 0 then the game ends
     if (lives == 0)
     {
@@ -282,7 +282,6 @@ function computeAndRender()
 
 function render()
 {
-    console.log("render is called");
     // Clear the canvas
     gc.clearRect (0, 0, canvas.width, canvas.height);
     // Draw images
@@ -296,8 +295,6 @@ function render()
     drawSlider();
     // Draw ball
     drawBall();
-    checks = document.getElementById("check"); 
-    checkBox();
     // If the game level is higher than 4 move the blocks
     if (level > 4)
     {
@@ -331,7 +328,6 @@ function render()
 }
 function randomWidth()
 {
-    console.log("randomwidth is called");
    ranWid=Math.floor(Math.random()*scWiAd-50);
    if(ranWid<50)
    {
@@ -341,7 +337,6 @@ function randomWidth()
 }
 function randomNumber()
 {
-    console.log("randomnumber is called");
     // Sets a random Y position above the canvas up to 1000
     ranNum = Math.floor(Math.random() * 1000);
     return ranNum;
@@ -349,7 +344,6 @@ function randomNumber()
 
 function compute()
 {
-    console.log("compute is called");
     if(!clickHandled) {
         if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
         {
@@ -467,7 +461,14 @@ function compute()
     else if (sliderX < ballX + ballRadius && sliderX + sliderWidth > ballX && sliderY < ballY + ballRadius && sliderHeight + sliderY > ballY)
     {
         // Plays shooting sound
-        pew.play();
+        if (checks.checked == false)
+        {
+            pew.pause
+        }
+        else
+        {
+            pew.play();
+        }
         if (ballX <= sliderX + (sliderWidth / 2) && ballDX <= 0)
         {
             ballDX += 0.5;
@@ -504,7 +505,6 @@ function compute()
 
 function drawSlider()
 {
-    console.log("drawslider is called");
     // Draw slider
     gc.beginPath();
     gc.rect (sliderX, sliderY, sliderWidth, sliderHeight);
@@ -515,7 +515,6 @@ function drawSlider()
 
 function drawBall()
 {
-    console.log("drawball is called");
     // Draw ball
     gc.beginPath();
     gc.arc (ballX, ballY, ballRadius, 0, 2 * Math.PI);
@@ -526,7 +525,6 @@ function drawBall()
 
 function drawBlock()
 {
-    console.log("drawblock is called");
     // Draw blocks
     for(i = 0; i < blocks[level-1].x.length; i++)
     {
@@ -542,7 +540,6 @@ function drawBlock()
 
 function collisionBlock()
 {
-    console.log("collision is called");
     // If the block collides with the ball, play the pop sound and get rid of the block, bounce the ball off and check what colour the block was to add on a certain score
 
     for(i=0;i<blocks[level-1].x.length;i++)
@@ -554,7 +551,6 @@ function collisionBlock()
             {
               if (gameStart)
               {
-                  pop.play();
                   blocks[level-1].x.splice(i,1);
                   blocks[level-1].y.splice(i,1);
                   blocks[level-1].w.splice(i,1);
@@ -562,6 +558,14 @@ function collisionBlock()
                   blocks[level-1].c.splice(i,1);
                   ballDY = -ballDY;
                   collisionColor(i);
+                  if (checks.checked == false)
+                  {
+                      pop.pause
+                  }
+                  else
+                  {
+                      pop.play();
+                  }
               }
             }
     }
@@ -570,7 +574,6 @@ function collisionBlock()
 
 function collisionColor(i)
 {
-    console.log("collisioncoloour is called");
   var colour_of_blocks=blocks[level-1].c[i];
 
     // If the block is blue then add on 10 points
@@ -597,11 +600,9 @@ function collisionColor(i)
 
 function whatLevel()
 {
-    console.log("what level")
     // If the all the blocks have been hit, increase the level by 1, bounce the ball off, show which level you are on and draw the next set of blocks
     if (blocks[level-1].x.length == 0)
     {
-        console.log("blocks.length")
         level += 1;
         ballDY = -ballDY;
         nextLevel();
@@ -611,7 +612,14 @@ function whatLevel()
     if (level == 7)
     {
         gc.clearRect(0, 0, canvas.width, canvas.height);
-        theme.play();
+        if (checks.checked == false)
+        {
+            theme.pause
+        }
+        else
+        {
+            theme.play();
+        }
         stop = true;
         $("#leveltwo").hide();
         $('.demo').fireworks({
@@ -620,17 +628,23 @@ function whatLevel()
             width: '100%',
             height: '100%'
         });
-        $("#complete").show().animate({top:"-30%"});
+        $("#complete").show();
     }
 }
 
 function nextLevel()
 {
-    console.log("next level")
     stop = true;
     document.getElementById("leveltwo").innerHTML = "Level " + level;
     $("#leveltwo").show().animate({top:"20%"}).fadeOut(3000);
-    beam.play();
+    if (checks.checked == false)
+    {
+        beam.pause
+    }
+    else
+    {
+        beam.play();
+    }
     stop = false;
     extraY = 0;
 }
@@ -638,9 +652,15 @@ function nextLevel()
 // Clears the canvas once you die, plays the end phrase and shows the over
 function gameOver()
 {
-    console.log("gameover is called");
     gc.clearRect (0, 0, canvas.width, canvas.height);
-    end.play();
+    if (checks.checked == false)
+    {
+        end.pause
+    }
+    else
+    {
+        end.play();
+    }
     stop = true;
     $("#over").show();
 }
@@ -648,7 +668,6 @@ function gameOver()
 // When the restart button is clicked if you die then it hides the over, resets the score and then resets the game back to the beginning
 $(document).on("click","#restartButton",function()
 {
-    console.log("restartbutton is pressed");
     $("#over").hide().animate({top:"30%"});
     document.getElementById("score").innerText = "";
     reset();
@@ -658,7 +677,6 @@ $(document).on("click","#restartButton",function()
 // When the restart game at the end is clicked then it hides the complete, resets the score and then reloads the page
 $(document).on("click","#restartGame",function()
 {
-    console.log("complete is called");
     $("#complete").hide().animate({top:"30%"});
     document.getElementById("score").innerText="";
     window.location.reload(true);
@@ -674,18 +692,6 @@ function scorer ()
 {
     // Score taken from the html element
     document.getElementById("score").innerText = score
-}
-function checkBox()
-{
-    if (checks.checked == true)
-    {
-        pew.pause();
-        beam.pause();
-        end.pause();
-        start.pause();
-        theme.pause();
-        pop.pause();
-    }
 }
 /*$(document).on("pagecreate","#nameScreen", onPageCreated);
 
