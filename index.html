@@ -18,31 +18,48 @@
     <link rel = "stylesheet" href = "MobileGame.css"/>
 </head>
 <body>
+	<!--Start Screen-->
     <div data-role = "page" id = "startScreen">
         <div>
+			<!--Settings-->
             <div data-role="panel" id="settings">
                 <h1>Settings</h1>
                 <p>Please swipe to close.</p>
                 <label class = "switch">
+					<!--Sound Settings-->
                     <h2>Sound:</h2>
                     <input type = "checkbox" data-role = "flipswitch" name = "check" id = "check" checked = "">
                 </label>
+				<!--Difficulty Settings-->
+                <h2>Difficulty:</h2>
+                <form>
+                    <fieldset data-role = "controlgroup" data-theme = "b" data-type = "horizontal">
+                    <input type = "radio"  name = "Radio" id = "Radio1" checked = "checked" value = "on">
+                    <label for = "Radio1">Easy</label>
+                        <input type = "radio"  name = "Radio" id = "Radio2" value = "off">
+                    <label for = "Radio2">Medium</label>
+                        <input type = "radio"  name = "Radio" id = "Radio3" value = "other">
+                    <label for = "Radio3">Hard</label>
+                    </fieldset>
+                </form>
             </div>
             <!-- Background image -->
             <img src = "wreckingBall.png" id = "wreckingball" width = "243" height = "400">
-            <!-- Button -->
+            <!--Start Game button-->
             <h1 class="title">Demolition Maze</h1>
             <a href="#gamescreen" class="ui-btn ui-btn-inline ui-corner-all ui-shadow start_button">Start Game</a>
             <br/><br/>
-            <!-- Settings panel -->
+            <!--Settings button-->
             <a href="#settings" class="ui-btn ui-btn-inline ui-corner-all ui-shadow panel_button" onclick = "panel()">Settings</a>
         </div>
     </div>
-
+	<!--Game-->
     <div id = "gamescreen" data-role = "page" class = "ui-content" style="background:white">
         <div id = "game">
             <div data-role = "header" style="background:white; border: none;" >
-                <!-- Lives and score -->
+                <!-- Lives, score, pause and play-->
+                <img id = "Pause" src = "Pause.png"  width = "60" height = "60" onclick = "pause()">
+				<img id = "Play" src = "Play.png"  width = "60" height = "60" onclick = "play()">
                 <h2 class="head">Lives: <span id = "lives"></span>&nbsp;Score: <span id = "score"></span></h2>
             </div>
             <!-- Fireworks -->
@@ -58,15 +75,26 @@
             </canvas>
         </div>
     </div>
+	<!--Level is shown-->
     <div data-role = "page" id = "leveltwo"></div>
-    <!-- Game over screen with restart button -->
-    <div data-role = "page" id = "over">
+    <!-- Game over screen with restart button and high score -->
+    <div data-role="page" data-dialogue="true" id = "over" >
         <h1 class="title">Game Over</h1>
+		<h2>Your high score: </h2><div id = "scoreArea2"></div>
+		</br></br>
         <button id = "restartButton">Restart</button>
     </div>
-    <!-- Completion screen with restart button -->
+    <!-- Completion screen with restart button and high score-->
     <div data-role = "page" id = "complete">
         <h1 class = "title">Congratulations!</h1>
+		<h2>Your high score: </h2><div id = "scoreArea"></div>
+		</br></br>
+		<!--Adding a username to a highscore-->
+        <label for = "getName"><h2>Enter a username: </h2></label>
+        <input type = "text" name = "getName" id = "getName" value = ""/>
+        <input id = "subScore" type = "submit" onclick = "subScore()"/>
+        <div id = "getHighScoring"></div>
+        </br></br>
         <button id = "restartGame">Restart</button>
     </div>
 

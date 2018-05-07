@@ -1,14 +1,32 @@
-//$(document).on("pagecreate", "#startScreen", onDeviceReady);
-document.addEventListener("deviceready", onDeviceReady, false); /* use this on mobile */
-/*$(window).ready(function(){onDeviceReady()});/* use this on desktop */
+//Event listener for on device ready
+document.addEventListener("deviceready", onDeviceReady, false); /*Mobile*/
+$(window).ready(function(){onDeviceReady()});/*Desktop*/
 
+//Variables
+var highscores={};
+var isThereASaveFile=false;
+var data;
 
+//On device ready
 function onDeviceReady()
 {
-    document.addEventListener("resume", onResume, true);
-    document.addEventListener("pause", onPause, true);
+    /* document.addEventListener("resume", onResume, true);
+    document.addEventListener("pause", onPause, true); */
+    loadScores();
 }
 
+//Loading any scores already stored
+function loadScores()
+{
+  if("highscores" in localStorage)
+  {
+    isThereASaveFile=true;
+    data=localStorage.getItem("highscores"); /*Retrieve from storage*/
+    highscores=JSON.parse(data); /*Parse object into highscores variable*/
+  }
+}
+
+//Screen size for the mobile device being used
 function screenSize()
 {
     screenWidth=window.innerWidth;
@@ -23,18 +41,17 @@ function screenSize()
     ballRadius=widPer*2;
 }
 
-function onPause()
+//Pauses the game when in the background
+/* function onPause()
 {
-    stop = true;
+    alert("Pause");
 }
 
-
+//Resumes the play of the game when in the bought to the foreground
 function onResume()
 {
-    setTimeout(function(){
-        stop = false;
-    },1000);
-}
+    alert("Resume");
+} */
 
 $(document).on("pagecreate", "#gamescreen", begin);
 
@@ -48,9 +65,9 @@ var sliderY;
 var ballX;
 var ballY;
 var ballRadius;
-var ballDX = 2;
-var ballDY = 2;
-var level = 6;
+var ballDX;
+var ballDY;
+var level = 1;
 var blocks = [];
 var blockDX = 2;
 var blockDY = 2;
@@ -84,7 +101,7 @@ var positiveRestart;
 var gameStart=false;
 var lives = 3;
 var stopLife = false;
-var extraY = 0;
+/* var extraY = 0; */
 var up_down = "down";
 var pew = new Audio();
 pew.src = "Pew.wav"
@@ -103,46 +120,95 @@ var divWidth;
 var clickX;
 var checks;
 var clickHandled = true;
+var thisName;
+var newSave;
+var i;
+var len;
+var colour_of_blocks;
 
 function reset()
 {
     // Resetting variables when the restart button is pressed
     sliderX = 350,
         sliderWidth = 75;
-    ballDX = 2,
-        ballDY = 2,
         level = 1,
         blocks = [],
-        blockDX = 2,
-        blockDY = 2,
+            blockDX = 2,
+            blockDY = 2,
         score = 0,
         gameStart = true,
         stop = false,
         lives = 3,
         stopLife = false;
-    extraY=0;
+    /* extraY=0; */
+    if (radio1.checked === true)
+    {
+        ballDX = 2;
+        ballDY = 2;
+    }
+    else if (radio2.checked === true)
+    {
+        ballDX = 4;
+        ballDY = 4;
+    }
+    else if (radio3.checked === true)
+    {
+        ballDX = 6;
+        ballDY = 6;
+    }
 }
 
 function resetfromloss()
 {
     // Resetting variables when the ball goes below the canvas
     sliderX = 350;
-    ballDX = 2;
-    ballDY = 2;
     ballX = widPer * 48;
-    ballY = heiPer * 75;
+    ballY = heiPer * 50;
     blocks = [],
         blockDX = 2,
         blockDY = 2,
         stop = false,
         stopLife = false;
-    extraY=0;
+    /* extraY=0; */
+    if (radio1.checked === true)
+    {
+        ballDX = 2;
+        ballDY = 2;
+    }
+    else if (radio2.checked === true)
+    {
+        ballDX = 4;
+        ballDY = 4;
+    }
+    else if (radio3.checked === true)
+    {
+        ballDX = 6;
+        ballDY = 6;
+    }
 }
 
 function begin()
 {
-    console.log("begin");
+	//Checks where the settings
     checks = document.getElementById("check");
+    radio1 = document.getElementById("Radio1");
+    radio2 = document.getElementById("Radio2");
+    radio3 = document.getElementById("Radio3");
+    if (radio1.checked === true)
+    {
+        ballDX = 2;
+        ballDY = 2;
+    }
+    else if (radio2.checked === true)
+    {
+        ballDX = 3;
+        ballDY = 3;
+    }
+    else if (radio3.checked === true)
+    {
+        ballDX = 4;
+        ballDY = 4;
+    }
     // Shows the life and score on the screen before hand
     life();
     scorer();
@@ -156,7 +222,6 @@ function begin()
     // Getting content from the html file
     canvas = document.getElementById("myCanvas");
     gc = canvas.getContext("2d");
-    screenSize();
     bomb = document.getElementById("bomb");
     star = document.getElementById("star");
     skull = document.getElementById("skull");
@@ -170,7 +235,6 @@ function begin()
     getLevelDesigns();
 
     // Setting variables
-
     flowerVelo = 0.1;
     flowerLocWidth = randomWidth();
     flowerLoc = widPer * 45;
@@ -192,7 +256,7 @@ function begin()
     spriteWidth = widPer * 5;
     spriteHeight = heiPer * 5;
     ballX = widPer * 48;
-    ballY = heiPer * 75;
+    ballY = heiPer * 50;
     sliderY = scHeAd - sliderHeight;
 
     // Starts the animation frame loop
@@ -201,49 +265,52 @@ function begin()
 
 function startGame()
 {
-    console.log("startGame");
-    
+	//Hides the level
     $("#leveltwo").hide();
     $(document.body).ready(function()
     {
-        if (checks.checked == false)
+		//Checks whether to play the start music
+        if (checks.checked === false)
         {
-            start.pause
+            start.pause();
         }
         else
         {
             start.play();
         }
+		//Shows the canvas
         $("#myCanvas").show();
         gameStart = true;
     });
-    
-     $("#gamescreen").on('click touchstart', function(e)
+	//Touching the canvas to then move the paddle
+    $("#gamescreen").on('click touchstart', function(e)
     {
         clickHandled = false;
         divWidth = $("#gamescreen").width();
         clickX = e.clientX;
     });
-    
+
 }
 
+//Drawing the blocks
 function getLevelDesigns()
 {
     blocks = [
         // X and Y are the starting position for the block. W is width, H is height and C is the colour from the colourArray.  The sizes are percentages.
         // Level 1
-        {x:[2,11,20,29,38,47,56,65,74,83,92],y:[5,5,5,5,5,5,5,5,5,5,5],w:[7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10],c:[0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92],y:[1,1,1,1,1,1,1,1,1,1,1],w:[6,6,6,6,6,6,6,6,6,6,6],h:[8,8,8,8,8,8,8,8,8,8,8],c:[0,0,0,0,0,0,0,0,0,0,0]},
         // Level 2
-        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83],y:[1,1,1,1,1,1,1,1,1,1,1,10,10,10,10,10,10,10,10,10],w:[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],h:[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],c:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 3
-        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74],y:[1,1,1,1,1,1,1,1,1,1,1,10,10,10,10,10,10,10,10,10,19,19,19,19,19,19,19],w:[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],h:[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 4
-        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35,35,35,50,50,50,50,50,50,50],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74],y:[1,1,1,1,1,1,1,1,1,1,1,10,10,10,10,10,10,10,10,10,19,19,19,19,19,19,19,19,19,28,28,28,28,28,28,28],w:[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],h:[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 5
-        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74,140,29,38,47,56,65],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35,35,35,50,50,50,50,50,50,50,65,65,65,65,65],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74,140,29,38,47,56,65],y:[1,1,1,1,1,1,1,1,1,1,1,10,10,10,10,10,10,10,10,10,19,19,19,19,19,19,19,19,19,28,28,28,28,28,28,28,37,37,37,37,37],w:[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],h:[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},
         // Level 6
-        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74,29,38,47,56,65,2,11,20,29,38,47,56,65,74,83,92],y:[5,5,5,5,5,5,5,5,5,5,5,20,20,20,20,20,20,20,20,20,35,35,35,35,35,35,35,35,35,50,50,50,50,50,50,50,65,65,65,65,65,80,80,80,80,80,80,80,80,80,80,80],w:[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],h:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]}
+        {x:[2,11,20,29,38,47,56,65,74,83,92,11,20,29,38,47,56,65,74,83,11,20,29,38,47,56,65,74,83,20,29,38,47,56,65,74,29,38,47,56,65,2,11,20,29,38,47,56,65,74,83,92],y:[1,1,1,1,1,1,1,1,1,1,1,10,10,10,10,10,10,10,10,10,19,19,19,19,19,19,19,19,19,28,28,28,28,28,28,28,37,37,37,37,37,46,46,46,46,46,46,46,46,46,46,46],w:[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],h:[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],c:[2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]}
     ];
+	//Colours
     colourArray=["#008B8B","#FFDF00","#9DD885"];
 }
 
@@ -290,13 +357,13 @@ function render()
     gc.drawImage (flower, flowerLocWidth, flowerLoc, spriteWidth, spriteHeight);
     gc.drawImage (bomb, bombLocWidth, bombLoc, spriteWidth, spriteHeight);
     gc.drawImage (negative, negativeLocWidth, negativeLoc, spriteWidth, spriteHeight);
-    gc.drawImage (positive, positiveLocWidth, positiveLoc, spriteWidth, spriteHeight);
+    gc.drawImage (positive, positiveLocWidth, positiveLoc, spriteWidth, spriteHeight); 
     // Draw slider
     drawSlider();
     // Draw ball
     drawBall();
     // If the game level is higher than 4 move the blocks
-    if (level > 4)
+    /* if (level > 4)
     {
         // Adds on Y when the blocks are less than 0
         if (extraY <= 0.0)
@@ -318,7 +385,7 @@ function render()
         {
             extraY -= 0.05;
         }
-    }
+    } */
 
     // Draws each block for the level and checks for collisions
     for (var i = 0; i < blocks.length; i++)
@@ -326,6 +393,8 @@ function render()
         drawBlock();
     }
 }
+
+//Creates a random width for falling objects
 function randomWidth()
 {
    ranWid=Math.floor(Math.random()*scWiAd-50);
@@ -335,15 +404,17 @@ function randomWidth()
    }
    return ranWid;
 }
+
+// Sets a random Y position above the canvas up to 1000
 function randomNumber()
 {
-    // Sets a random Y position above the canvas up to 1000
     ranNum = Math.floor(Math.random() * 1000);
     return ranNum;
 }
 
 function compute()
 {
+	//Moving the slider depending on where on the screen the user pressed
     if(!clickHandled) {
         if (clickX > divWidth/2 && sliderX < canvas.width - sliderWidth)
         {
@@ -354,9 +425,9 @@ function compute()
             sliderX -= 100;
         }
         clickHandled = true;
-        
+
     }
-	
+
 	// Making the variables move
     ballX += ballDX
     ballY += ballDY
@@ -366,7 +437,8 @@ function compute()
     flowerLoc += 1
     negativeLoc += 1
     positiveLoc += 1
-
+	
+	//Collision of blocks with ball
     collisionBlock();
 
     // If the image is greater than 1000 below the canvas send the image to the top of the canvas with a random X and random Y above the canvas
@@ -460,15 +532,16 @@ function compute()
     // If the ball hits the slider at a certain angle from a certain direction it alters the angle of the rebound
     else if (sliderX < ballX + ballRadius && sliderX + sliderWidth > ballX && sliderY < ballY + ballRadius && sliderHeight + sliderY > ballY)
     {
-        // Plays shooting sound
-        if (checks.checked == false)
+        // Plays shooting sound depending on the settings
+        if (checks.checked === false)
         {
-            pew.pause
+            pew.pause();
         }
         else
         {
             pew.play();
         }
+		// Bounces the ball
         if (ballX <= sliderX + (sliderWidth / 2) && ballDX <= 0)
         {
             ballDX += 0.5;
@@ -485,7 +558,6 @@ function compute()
         {
             ballDX += 0.5;
         }
-        // Bounces the ball
         ballDY = -ballDY;
         if (ballDX == 0)
         {
@@ -541,7 +613,6 @@ function drawBlock()
 function collisionBlock()
 {
     // If the block collides with the ball, play the pop sound and get rid of the block, bounce the ball off and check what colour the block was to add on a certain score
-
     for(i=0;i<blocks[level-1].x.length;i++)
     {
         if(ballX+ballRadius>widPer*blocks[level-1].x[i]&&
@@ -558,9 +629,9 @@ function collisionBlock()
                   blocks[level-1].c.splice(i,1);
                   ballDY = -ballDY;
                   collisionColor(i);
-                  if (checks.checked == false)
+                  if (checks.checked === false)
                   {
-                      pop.pause
+                      pop.pause();
                   }
                   else
                   {
@@ -572,10 +643,11 @@ function collisionBlock()
 
 }
 
+//Collision and colour depends on the score
 function collisionColor(i)
 {
-  var colour_of_blocks=blocks[level-1].c[i];
-
+	//Colour of the blocks
+	colour_of_blocks = blocks[level-1].c[i];
     // If the block is blue then add on 10 points
     if (colourArray[colour_of_blocks] == "#008B8B")
     {
@@ -609,12 +681,12 @@ function whatLevel()
         getLevelDesigns();
     }
     // When it hits level 7 it clears the canvas, plays the theme tune, hides the element saying what level you are on, produces the fireworks and sound effects, and shows complete and restart button
-    if (level == 7)
+    if (level === 7)
     {
         gc.clearRect(0, 0, canvas.width, canvas.height);
-        if (checks.checked == false)
+        if (checks.checked === false)
         {
-            theme.pause
+            theme.pause();
         }
         else
         {
@@ -629,33 +701,38 @@ function whatLevel()
             height: '100%'
         });
         $("#complete").show();
+		//Shows the score
+		$("#scoreArea").text(score);
     }
 }
 
 function nextLevel()
 {
+	//Clears the canvas and shows the level 
     stop = true;
     document.getElementById("leveltwo").innerHTML = "Level " + level;
     $("#leveltwo").show().animate({top:"20%"}).fadeOut(3000);
-    if (checks.checked == false)
+    //Beam sound effects
+	if (checks.checked === false)
     {
-        beam.pause
+        beam.pause();
     }
     else
     {
         beam.play();
     }
+	//Shows the canvas
     stop = false;
-    extraY = 0;
+    /* extraY = 0; */
 }
 
 // Clears the canvas once you die, plays the end phrase and shows the over
 function gameOver()
 {
     gc.clearRect (0, 0, canvas.width, canvas.height);
-    if (checks.checked == false)
+    if (checks.checked === false)
     {
-        end.pause
+        end.pause();
     }
     else
     {
@@ -663,6 +740,8 @@ function gameOver()
     }
     stop = true;
     $("#over").show();
+	//Shows the score
+	$("#scoreArea2").text(score);
 }
 
 // When the restart button is clicked if you die then it hides the over, resets the score and then resets the game back to the beginning
@@ -672,7 +751,7 @@ $(document).on("click","#restartButton",function()
     document.getElementById("score").innerText = "";
     reset();
     begin();
-})
+});
 
 // When the restart game at the end is clicked then it hides the complete, resets the score and then reloads the page
 $(document).on("click","#restartGame",function()
@@ -680,7 +759,7 @@ $(document).on("click","#restartGame",function()
     $("#complete").hide().animate({top:"30%"});
     document.getElementById("score").innerText="";
     window.location.reload(true);
-})
+});
 
 function life ()
 {
@@ -693,10 +772,69 @@ function scorer ()
     // Score taken from the html element
     document.getElementById("score").innerText = score
 }
-/*$(document).on("pagecreate","#nameScreen", onPageCreated);
 
-function onPageCreated() {
-    var ractive = new Ractive({
-        template: '#username',
-    });
-}*/
+function subScore()   
+	//Structure of high scores is highscores = {"name":[],"score":[]}
+    {
+      flag=false;
+      console.log("subscore button");
+	  /*Get the name that is entered*/
+      thisName = $("#getName").val(); 
+	  /* If there is no save file */
+      if(!isThereASaveFile) 
+      {
+        highscores={"name":[thisName],"score":[score]};
+        flag=true;
+        isThereASaveFile=true;
+      }
+      else
+      {
+		/* Put length of highscores object into variable */
+        len = highscores.name.length;
+		/* Iterate through score list */
+        for (i=0; i<len; i++) 
+        {
+			/* If this name is found in save file */
+			if(thisName === highscores.name[i]) 
+			{
+				highscores.score[i]=score; /* overwrite the score for that name */
+				flag=true;
+			}
+        }
+        if(!flag) /* If flag is still false, nothing has been done yet */
+        {
+          highscores.name[len]=thisName; /* Put new name at end of array */
+          highscores.score[len]=score; /* Put new score at end of array */
+        }
+      }
+      newSave = JSON.stringify(highscores); /* Set the object to a string */
+      localStorage.setItem("highscores", newSave); /* Save the highscore file */
+      highscoring();
+    };	
+	
+function highscoring()
+{
+	//Print the highscores
+    for(i=0; i<highscores.name.length; i++)
+    {
+        $("#getHighScoring").append("<p>"+highscores.name[i]+":"+highscores.score[i]+"</p>");
+    }
+}
+
+/* function pause()
+{
+    ballDX = 0;
+    ballDY = 0;
+	sliderX += 0;
+	sliderX -= 0;
+	bombRestart = 0;
+	starRestart = 0;
+	flowerRestart = 0;
+	negativeRestart = 0;
+	positiveRestart = 0;
+}
+
+function play()
+{
+	begin();
+} */
